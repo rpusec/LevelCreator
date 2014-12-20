@@ -83,7 +83,7 @@ public class Controller {
 		mainView.removeAvailableTexture(availableTexture);
 	}
 	
-	public void addToSelected(DisplayTexture dt)
+	public void addToSelected(DisplayTexture dt, boolean removeIfExist)
 	{	
 		if(!dt.isSelected())
 		{
@@ -91,7 +91,8 @@ public class Controller {
 			dt.setSelected(true);
 		}
 		else
-			removeFromSelected(dt);
+			if(removeIfExist)
+				removeFromSelected(dt);
 	}
 	
 	public void removeFromSelected(DisplayTexture dt)
@@ -228,7 +229,7 @@ public class Controller {
 	public void selectMultipleAtOnce(DisplayTexture dt)
 	{
 		if(selectedDisplayTextures.size() == 0)
-			addToSelected(dt);
+			addToSelected(dt, false);
 		else
 		{
 			//desc - from which destination it should start selecting
@@ -238,7 +239,6 @@ public class Controller {
 			
 			if(mod(endpoint, stageWidth) < mod(desc, stageWidth))
 			{
-				System.out.println("NOW");
 				int tempDesc = desc;
 				desc -= mod(desc, stageWidth) - mod(endpoint, stageWidth);
 				endpoint += mod(tempDesc, stageWidth) - mod(endpoint, stageWidth);
@@ -246,8 +246,8 @@ public class Controller {
 			
 			System.out.println(desc + " " + endpoint);
 			
-			addToSelected(displayTextures.get(desc));
-			addToSelected(displayTextures.get(endpoint));
+			addToSelected(displayTextures.get(desc), false);
+			addToSelected(displayTextures.get(endpoint), false);
 			
 			//if it is not the same block
 			if(desc != endpoint)
@@ -255,7 +255,7 @@ public class Controller {
 				for(int i = desc; i < endpoint; i++)
 				{
 					if(mod(desc, stageWidth) <= mod(i, stageWidth) && mod(endpoint, stageWidth) >= mod(i, stageWidth))
-						addToSelected(displayTextures.get(i));
+						addToSelected(displayTextures.get(i), false);
 				}
 			}
 		}

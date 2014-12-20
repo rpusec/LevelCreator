@@ -102,7 +102,7 @@ public class LevelDesignPanel extends JPanel implements ActionListener, KeyListe
 				controller.removeAllFromSelected();
 			
 			if(!multipleAtOnceMode)
-				controller.addToSelected((DisplayTexture) e.getSource());
+				controller.addToSelected((DisplayTexture) e.getSource(), true);
 			else
 				controller.selectMultipleAtOnce((DisplayTexture) e.getSource());
 		}
