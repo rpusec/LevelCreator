@@ -237,14 +237,21 @@ public class Controller {
 			int desc = displayTextures.indexOf(selectedDisplayTextures.get(0));
 			int endpoint = displayTextures.indexOf(dt);
 			
+			//if the user selected a lower DT as the "desc", and an upper DT as "endpoint"
+			//then the sides of the two variables have to be switched
+			if(desc > endpoint)
+			{
+				int tempDesc = desc;
+				desc = endpoint;
+				endpoint = tempDesc;
+			}
+			
 			if(mod(endpoint, stageWidth) < mod(desc, stageWidth))
 			{
 				int tempDesc = desc;
 				desc -= mod(desc, stageWidth) - mod(endpoint, stageWidth);
 				endpoint += mod(tempDesc, stageWidth) - mod(endpoint, stageWidth);
 			}
-			
-			System.out.println(desc + " " + endpoint);
 			
 			addToSelected(displayTextures.get(desc), false);
 			addToSelected(displayTextures.get(endpoint), false);
