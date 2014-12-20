@@ -15,7 +15,9 @@ public class LevelDesignPanel extends JPanel implements ActionListener, KeyListe
 	private static final long serialVersionUID = 1L;
 	private Controller controller;
 	private boolean multipleMode = false; //determines when to select multiple DTs
-	private int multipleModeKey = KeyEvent.VK_SHIFT; 
+	private boolean multipleAtOnceMode = false; //determines when to select multiple DTs
+	private int multipleModeKey = KeyEvent.VK_CONTROL; 
+	private int multipleAtOnceKey = KeyEvent.VK_SHIFT;
 	private GridBagConstraints c;
 	private ProjectInfoPanel pip;
 	
@@ -96,10 +98,13 @@ public class LevelDesignPanel extends JPanel implements ActionListener, KeyListe
 		
 		if(e.getSource() instanceof DisplayTexture)
 		{
-			if(!multipleMode)
+			if(!multipleMode && !multipleAtOnceMode)
 				controller.removeAllFromSelected();
 			
-			controller.addToSelected((DisplayTexture) e.getSource());
+			if(!multipleAtOnceMode)
+				controller.addToSelected((DisplayTexture) e.getSource());
+			else
+				controller.selectMultipleAtOnce((DisplayTexture) e.getSource());
 		}
 		
 	}
@@ -117,6 +122,9 @@ public class LevelDesignPanel extends JPanel implements ActionListener, KeyListe
 		if(ke.getKeyCode() == multipleModeKey) 
 			multipleMode = true;
 		
+		if(ke.getKeyCode() == multipleAtOnceKey) 
+			multipleAtOnceMode = true;
+		
 		checkCapslock();
 	}
 
@@ -125,6 +133,9 @@ public class LevelDesignPanel extends JPanel implements ActionListener, KeyListe
 		
 		if(ke.getKeyCode() == multipleModeKey) 
 			multipleMode = false;
+		
+		if(ke.getKeyCode() == multipleAtOnceKey) 
+			multipleAtOnceMode = false;
 		
 		//if backspace was pressed, we need to remove
 		//the selected textures

@@ -221,6 +221,46 @@ public class Controller {
 		}
 	}
 	
+	/**
+	 * Selects multiple DTs at once. 
+	 * @param dt DT to which it should select
+	 */
+	public void selectMultipleAtOnce(DisplayTexture dt)
+	{
+		if(selectedDisplayTextures.size() == 0)
+			addToSelected(dt);
+		else
+		{
+			//desc - from which destination it should start selecting
+			//endpoint - from which endpoint should it stop selecting
+			int desc = displayTextures.indexOf(selectedDisplayTextures.get(0));
+			int endpoint = displayTextures.indexOf(dt);
+			
+			if(mod(endpoint, stageWidth) < mod(desc, stageWidth))
+			{
+				System.out.println("NOW");
+				int tempDesc = desc;
+				desc -= mod(desc, stageWidth) - mod(endpoint, stageWidth);
+				endpoint += mod(tempDesc, stageWidth) - mod(endpoint, stageWidth);
+			}
+			
+			System.out.println(desc + " " + endpoint);
+			
+			addToSelected(displayTextures.get(desc));
+			addToSelected(displayTextures.get(endpoint));
+			
+			//if it is not the same block
+			if(desc != endpoint)
+			{
+				for(int i = desc; i < endpoint; i++)
+				{
+					if(mod(desc, stageWidth) <= mod(i, stageWidth) && mod(endpoint, stageWidth) >= mod(i, stageWidth))
+						addToSelected(displayTextures.get(i));
+				}
+			}
+		}
+	}
+	
 	public void notifyNewFile()
 	{
 		selectedFile = null;
@@ -280,5 +320,15 @@ public class Controller {
 	{
 		if(mainView != null)
 			mainView.buildWorkingStage(stageHeight, stageWidth, defaultAT, availableTextures, displayTextures);
+	}
+	
+	/**
+	 * Checks if a number is in a certain modulo
+	 * @param num the number
+	 * @param mod_num modulo number
+	 */
+	private int mod(int num, int mod_num)
+	{
+		return num % mod_num;
 	}
 }
