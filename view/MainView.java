@@ -9,7 +9,15 @@ import javax.swing.*;
 import model.*;
 import controller.*;
 
-public class MainView extends JFrame implements ActionListener {
+/**
+ * 
+ * This is the main class which incorporates 
+ * certain other 'View' classes such as LevelDesignPanel
+ * AvailableTexturesPanel, and ProjectInfoPanel. 
+ * @author Roman Pusec
+ *
+ */
+public class MainView extends JFrame implements ActionListener, KeyListener {
 	
 	private static final long serialVersionUID = 1L;
 	private JMenu jmFile, jmOptions, jmHelp;
@@ -19,12 +27,19 @@ public class MainView extends JFrame implements ActionListener {
 	private ProjectInfoPanel projectInfoPanel;
 	private Controller controller;
 	
+	/**
+	 * Constructs the view, builds the menu,
+	 * adds custom made panels, instantiates the 
+	 * controller. 
+	 */
 	public MainView() {
+		addKeyListener(this); 
+		setFocusable(true);
 		
 		controller = new Controller();
 		controller.addMainViewReference(this);
 		projectInfoPanel = new ProjectInfoPanel();
-		levelDesignPanel = new LevelDesignPanel(controller, projectInfoPanel);
+		levelDesignPanel = new LevelDesignPanel(controller);
 		availableTexturePanel = new AvailableTexturePanel(controller);
 		
 		buildMenu();
@@ -40,24 +55,54 @@ public class MainView extends JFrame implements ActionListener {
 		setLocationRelativeTo(null); 
 		setVisible(true); 
 		
+		checkCapslock();
+		
 		setDefaultWorkingStage();
 	}
 	
+	/**
+	 * Checks whether or not CAPSLOCK had been activated. 
+	 */
+	private void checkCapslock()
+	{
+		if(Toolkit.getDefaultToolkit().getLockingKeyState(KeyEvent.VK_CAPS_LOCK))
+			projectInfoPanel.notifyCapslock(true);
+		else
+			projectInfoPanel.notifyCapslock(false);
+	}
+	
+	/**
+	 * Updates the stage with new/updated DisplayTextures. 
+	 * @param displayTextures Array of new and updated DisplayTextures. 
+	 */
 	public void updateStage(ArrayList<DisplayTexture> displayTextures)
 	{
 		levelDesignPanel.updateStage(displayTextures);
 	}
 	
+	/**
+	 * Adds an AvailableTexture to the appropriate panel. 
+	 * @param newAvailableTexture New AvailableTexture. 
+	 */
 	public void addAvailableTexture(AvailableTexture newAvailableTexture)
 	{
 		availableTexturePanel.addAvailableTexture(newAvailableTexture);
 	}
 	
+	/**
+	 * Removes an AvailableTexture. 
+	 * @param availableTexture Target AvailableTexture. 
+	 */
 	public void removeAvailableTexture(AvailableTexture availableTexture)
 	{
 		availableTexturePanel.removeAvailableTexture(availableTexture);
 	}
 	
+	/**
+	 * Notifies the application that a project file is being used. 
+	 * @param path Path of the project file. 
+	 * @param notifySave Should the application notify the user that the file had been saved. 
+	 */
 	public void notifyFileUsage(String path, boolean notifySave)
 	{
 		if(notifySave)
@@ -66,6 +111,9 @@ public class MainView extends JFrame implements ActionListener {
 		projectInfoPanel.setCurrentFilePath(path);
 	}
 	
+	/**
+	 * Builds the menu. 
+	 */
 	private void buildMenu()
 	{
 		//menu bar
@@ -120,7 +168,7 @@ public class MainView extends JFrame implements ActionListener {
 		//setting the menu bar to the frame
 		setJMenuBar(jMenuBar);
 		
-		//adding actionlisteners
+		//adding action listeners
 		jmiNew.addActionListener(this);
 		jmiSave.addActionListener(this);
 		jmiSaveAs.addActionListener(this);
@@ -136,6 +184,10 @@ public class MainView extends JFrame implements ActionListener {
 		jmiAbout.addActionListener(this);
 	}
 	
+	/**
+	 * It basically creates the available textures and display
+	 * textures which you see once you've opened the application. 
+	 */
 	private void setDefaultWorkingStage()
 	{
 		//creating the variables
@@ -152,16 +204,27 @@ public class MainView extends JFrame implements ActionListener {
 		buildWorkingStage(defaultStageSize, defaultStageSize, basicDefaultAT, basicATs, null);
 	}
 	
+	/**
+	 * Builds the overall stage to work on the levels. 
+	 * @param stageHeight The height of the stage.
+	 * @param stageWidth The width of the stage. 
+	 * @param defaultAT The default AvailableTexture. 
+	 * @param availableTextures Array of ATs.
+	 * @param displayTextures Array of DTs. 
+	 */
 	public void buildWorkingStage(int stageHeight, int stageWidth, AvailableTexture defaultAT, ArrayList<AvailableTexture> availableTextures, ArrayList<DisplayTexture> displayTextures)
 	{
+		//if the display textures are null, the application should
+		//draw new, empty display textures based on the applied height/width
 		if(displayTextures == null)
 			levelDesignPanel.buildPanel(stageHeight, stageWidth, defaultAT); 
 		else
 		{
-			controller.setDisplayTextures(displayTextures);
+			controller.setDisplayTextures(displayTextures); 
 			levelDesignPanel.updateStage(displayTextures); 
 		}
 		
+		//builds the available textures
 		availableTexturePanel.buildPanel(availableTextures); 
 	}
 	
@@ -169,7 +232,7 @@ public class MainView extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == jmiNew)
 		{
-			new AddNewLevel(controller);
+			new StartNewProject(controller);
 		}
 		else if(e.getSource() == jmiSave)
 		{
@@ -185,19 +248,19 @@ public class MainView extends JFrame implements ActionListener {
 		}
 		else if(e.getSource() == jmiAddRow)
 		{
-			new OptionsPanel(OptionsPanel.ADD_ROW_OPTION, controller, controller.getStageHeight());
+			new OptionsPanel(OptionsPanel.ADD_ROW_FUNCTION, controller, controller.getStageHeight());
 		}
 		else if(e.getSource() == jmiRemoveRow)
 		{
-			new OptionsPanel(OptionsPanel.REMOVE_ROW_OPTION, controller, controller.getStageHeight());
+			new OptionsPanel(OptionsPanel.REMOVE_ROW_FUNCTION, controller, controller.getStageHeight());
 		}
 		else if(e.getSource() == jmiAddCol)
 		{
-			new OptionsPanel(OptionsPanel.ADD_COL_OPTION, controller, controller.getStageWidth());
+			new OptionsPanel(OptionsPanel.ADD_COL_FUNCTION, controller, controller.getStageWidth());
 		}
 		else if(e.getSource() == jmiRemoveCol)
 		{
-			new OptionsPanel(OptionsPanel.REMOVE_COL_OPTION, controller, controller.getStageWidth());
+			new OptionsPanel(OptionsPanel.REMOVE_COL_FUNCTION, controller, controller.getStageWidth());
 		}
 		else if(e.getSource() == jmiAddAT)
 		{
@@ -213,11 +276,21 @@ public class MainView extends JFrame implements ActionListener {
 		}
 		else if(e.getSource() == jmiPrintLevel)
 		{
-			new PrintNewLevel(controller);
+			new PrintLevel(controller);
 		}
 		else if(e.getSource() == jmiAbout)
 		{
 			JOptionPane.showMessageDialog(null, "Level Creator\nBy Roman Pusec, 2014", "About", JOptionPane.INFORMATION_MESSAGE);
 		}
+	}
+
+	@Override
+	public void keyPressed(KeyEvent arg0) { checkCapslock(); }
+
+	@Override
+	public void keyReleased(KeyEvent arg0) {}
+
+	@Override
+	public void keyTyped(KeyEvent arg0) {
 	}
 }

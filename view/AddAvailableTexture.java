@@ -9,13 +9,23 @@ import javax.swing.*;
 import model.AvailableTexture;
 import controller.Controller;
 
+/**
+ * 
+ * Adds new Available Texture to the application. 
+ * @author Roman Pusec
+ *
+ */
 public class AddAvailableTexture extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
-	private JTextField jtfName, jtfKey; 
+	private JTextField jtfName, jtfKey;
 	private JButton jbAdd;
 	private Controller controller;
 	
+	/**
+	 * Creates the GUI and references the controller. 
+	 * @param contr Controller reference. 
+	 */
 	public AddAvailableTexture(Controller contr)
 	{
 		//setting up the controller

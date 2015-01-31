@@ -63,13 +63,31 @@ public class Controller {
 			
 		this.defaultAT = defaultAT; //setting the updated default key
 	}
-	public AvailableTexture getDefaultAT()					{return this.defaultAT;				}
 	
-	public void setStageWidth(int stageWidth)				{this.stageWidth = stageWidth;		}
-	public int getStageWidth()								{return this.stageWidth;			}
+	public AvailableTexture getDefaultAT()
+	{
+		return this.defaultAT;
+	}
 	
-	public void setStageHeight(int stageHeight)				{this.stageHeight = stageHeight;	}
-	public int getStageHeight()								{return this.stageHeight;			}
+	public void setStageWidth(int stageWidth)
+	{
+		this.stageWidth = stageWidth;
+	}
+	
+	public int getStageWidth()
+	{
+		return this.stageWidth;			
+	}
+	
+	public void setStageHeight(int stageHeight)
+	{
+		this.stageHeight = stageHeight;	
+	}
+	
+	public int getStageHeight()			
+	{
+		return this.stageHeight;			
+	}
 	
 	public void addAvailableTexture(AvailableTexture newAvailableTexture) 
 	{

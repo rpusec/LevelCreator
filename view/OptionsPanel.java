@@ -8,24 +8,34 @@ import javax.swing.*;
 import validation.Validation;
 import controller.Controller;
 
+/**
+ * 
+ * This class is focused on providing the end used with a certain
+ * array of options, such as adding/deleting rows/columns. 
+ * @author Roman Pusec
+ *
+ */
 public class OptionsPanel extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	
+	//text which is displayed on the frame, signifying what the frame does
 	private final String ADD_ROW_MESSAGE = "Add a new row to the stage. ";
 	private final String REMOVE_ROW_MESSAGE = "Remove a row from the stage. ";
 	private final String ADD_COL_MESSAGE = "Add a new column to the stage. ";
 	private final String REMOVE_COL_MESSAGE = "Remove a column from the stage. ";
 	
+	//text to appear on the JButton responsible for adding or deleting
 	private final String ADD_ROW_COMMAND = "Add Row";
 	private final String REMOVE_ROW_COMMAND = "Remove Row";
 	private final String ADD_COL_COMMAND = "Add Column";
 	private final String REMOVE_COL_COMMAND = "Remove Column";
 	
-	public static final int ADD_ROW_OPTION = 0;
-	public static final int REMOVE_ROW_OPTION = 1;
-	public static final int ADD_COL_OPTION = 2;
-	public static final int REMOVE_COL_OPTION = 3;
+	//used for the initial functionality of this class
+	public static final int ADD_ROW_FUNCTION = 0;
+	public static final int REMOVE_ROW_FUNCTION = 1;
+	public static final int ADD_COL_FUNCTION = 2;
+	public static final int REMOVE_COL_FUNCTION = 3;
 	
 	private int maxPos;
 	private int minPos;
@@ -35,27 +45,40 @@ public class OptionsPanel extends JFrame implements ActionListener {
 	
 	private Controller controller;
 	
-	public OptionsPanel(int option, Controller contr, int maxPos)
+	/**
+	 * Constructs the overall graphics based on the chosen option. The applied option
+	 * also affects the functionality of the class. 
+	 * @param functionality Defines what the class should do. Use the appropriate constants. 
+	 * @param contr The controller reference. 
+	 * @param maxPos The maximum position. 
+	 */
+	public OptionsPanel(int functionality, Controller contr, int maxPos)
 	{
 		this.controller = contr; 
 		
-		switch(option)
+		switch(functionality)
 		{
-			case ADD_ROW_OPTION : 
+			case ADD_ROW_FUNCTION : 
 				buildGraphics(ADD_ROW_MESSAGE, ADD_ROW_COMMAND, maxPos);
 				break;
-			case REMOVE_ROW_OPTION : 
+			case REMOVE_ROW_FUNCTION : 
 				buildGraphics(REMOVE_ROW_MESSAGE, REMOVE_ROW_COMMAND, maxPos);
 				break;
-			case ADD_COL_OPTION : 
+			case ADD_COL_FUNCTION : 
 				buildGraphics(ADD_COL_MESSAGE, ADD_COL_COMMAND, maxPos);
 				break;
-			case REMOVE_COL_OPTION : 
+			case REMOVE_COL_FUNCTION : 
 				buildGraphics(REMOVE_COL_MESSAGE, REMOVE_COL_COMMAND, maxPos);
 				break;
 		}
 	}
 	
+	/**
+	 * Builds the GUI. 
+	 * @param message The message to be displayed. 
+	 * @param addCommand The text to appear on the JButton. 
+	 * @param maxPos The maximum possible position of the stage. 
+	 */
 	private void buildGraphics(String message, String addCommand, int maxPos)
 	{
 		this.maxPos = maxPos;
@@ -105,6 +128,10 @@ public class OptionsPanel extends JFrame implements ActionListener {
 		setVisible(true);
 	}
 	
+	/**
+	 * Notifies the user that the last row cannot be removed. 
+	 * @return True if the user tries to remove a legal row/col, false otherwise. 
+	 */
 	private boolean notifyNullRowsCols()
 	{
 		if(maxPos <= 1)
@@ -116,7 +143,11 @@ public class OptionsPanel extends JFrame implements ActionListener {
 			return true;
 	}
 	
-	private boolean validateInput(String command)
+	/**
+	 * Checks if the user inputs are legal. 
+	 * @return True if all inputs are legal, false otherwise. 
+	 */
+	private boolean validateInput()
 	{
 		if(!Validation.validateNumberFormat(jtfPosition))
 		{
@@ -140,7 +171,7 @@ public class OptionsPanel extends JFrame implements ActionListener {
 		{
 			jtfPosition.setText("" + maxPos);
 		}
-		else if(validateInput(e.getActionCommand()))
+		else if(validateInput())
 		{
 			if(e.getActionCommand().equals(ADD_ROW_COMMAND))
 			{

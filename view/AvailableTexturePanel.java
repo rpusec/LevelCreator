@@ -8,6 +8,12 @@ import javax.swing.*;
 import model.AvailableTexture;
 import controller.*;
 
+/**
+ * 
+ * This is the panel which displays AvailableTextures to use. 
+ * @author Roman Pusec
+ *
+ */
 public class AvailableTexturePanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
@@ -15,6 +21,10 @@ public class AvailableTexturePanel extends JPanel {
 	private int currRow;
 	private GridBagConstraints c;
 	
+	/**
+	 * Constructs the GUI and adds the controller reference. 
+	 * @param contr
+	 */
 	public AvailableTexturePanel(Controller contr)
 	{
 		this.controller = contr;
@@ -23,6 +33,10 @@ public class AvailableTexturePanel extends JPanel {
 		setBackground(Color.LIGHT_GRAY);
 	}
 	
+	/**
+	 * Builds the panel with the new AvailableTextures. 
+	 * @param availableTextures Array of AvailableTextures. 
+	 */
 	public void buildPanel(ArrayList<AvailableTexture> availableTextures)
 	{
 		//removes all AvailableTextures
@@ -42,6 +56,10 @@ public class AvailableTexturePanel extends JPanel {
 		controller.setAvailableTextures(availableTextures);
 	}
 	
+	/**
+	 * Adds a single AT. 
+	 * @param newAvailableTexture New AT. 
+	 */
 	public void addAvailableTexture(AvailableTexture newAvailableTexture)
 	{
 		addAT(newAvailableTexture);
@@ -50,6 +68,10 @@ public class AvailableTexturePanel extends JPanel {
 		repaint();
 	}
 	
+	/**
+	 * Removes a single AT. 
+	 * @param availableTexture AT to remove. 
+	 */
 	public void removeAvailableTexture(AvailableTexture availableTexture)
 	{
 		remove(availableTexture);
@@ -58,6 +80,10 @@ public class AvailableTexturePanel extends JPanel {
 		repaint();
 	}
 	
+	/**
+	 * Adds a single AT. Used by the program only.  
+	 * @param newAvailableTexture New AT. 
+	 */
 	private void addAT(AvailableTexture newAvailableTexture)
 	{
 		c.fill = GridBagConstraints.HORIZONTAL;

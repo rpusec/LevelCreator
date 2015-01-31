@@ -7,6 +7,12 @@ import javax.swing.*;
 import model.AvailableTexture;
 import controller.Controller;
 
+/**
+ * 
+ * Removes a certain AT from the list. 
+ * @author Roman Pusec
+ *
+ */
 public class RemoveAvailableTexture extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
@@ -14,6 +20,10 @@ public class RemoveAvailableTexture extends JFrame implements ActionListener {
 	private JButton jbRemove;
 	private Controller controller;
 	
+	/**
+	 * Constructs the GUI, adds the reference to the initial Controller.
+	 * @param contr The controller object. 
+	 */
 	public RemoveAvailableTexture(Controller contr)
 	{
 		//setting up the controller
@@ -56,6 +66,9 @@ public class RemoveAvailableTexture extends JFrame implements ActionListener {
 		jbRemove.addActionListener(this);
 	}
 	
+	/**
+	 * Updates the combobox when a AT was removed. 
+	 */
 	private void updateComboBox()
 	{
 		//removes all items beforehand, so that the updated list will be set
@@ -66,6 +79,10 @@ public class RemoveAvailableTexture extends JFrame implements ActionListener {
 			jcbATList.addItem(at);
 	}
 	
+	/**
+	 * Disables the jbRemove button if array 
+	 * of ATs has zero elements. 
+	 */
 	private void checkATAmount()
 	{
 		//jbRemove is disabled if there's no ATs left

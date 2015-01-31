@@ -8,7 +8,13 @@ import controller.Controller;
 import validation.Validation;
 import model.AvailableTexture;
 
-public class AddNewLevel extends JFrame implements ActionListener {
+/**
+ * 
+ * This is the frame which starts the new project. 
+ * @author Roman Pusec
+ *
+ */
+public class StartNewProject extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	private JTextField jtfName, jtfKey, jtfStageWidth, jtfStageHeight, jftDefaultAT;
@@ -18,10 +24,14 @@ public class AddNewLevel extends JFrame implements ActionListener {
 	private final int MAX_AT_NUM = 35; 
 	private Controller controller;
 	
-	public AddNewLevel(Controller contr)
+	/**
+	 * Constructs the GUI and adds the controller reference. 
+	 * @param contr Controller reference. 
+	 */
+	public StartNewProject(Controller contr)
 	{
 		//setting the title
-		setTitle("Add New Level");
+		setTitle("Start New Project");
 		
 		//creating main JPanels
 		JPanel jpNorth = new JPanel();
@@ -115,6 +125,9 @@ public class AddNewLevel extends JFrame implements ActionListener {
 		this.controller = contr;
 	}
 	
+	/**
+	 * Resets all of the inputs. 
+	 */
 	private void resetInput()
 	{
 		jtaConsole.setText("");
@@ -124,6 +137,10 @@ public class AddNewLevel extends JFrame implements ActionListener {
 		availableTextures.clear();
 	}
 	
+	/**
+	 * Prints all of the ATs. 
+	 * @return List of ATs in String format. 
+	 */
 	private String printAvailableTextures()
 	{
 		String listStr = "";
@@ -137,8 +154,6 @@ public class AddNewLevel extends JFrame implements ActionListener {
 		
 		return listStr;
 	}
-	
-	
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -213,5 +228,4 @@ public class AddNewLevel extends JFrame implements ActionListener {
 		//constantly testing if the Undo jButton should be available
 		jbUndo.setEnabled(availableTextures.size() == 0 ? false : true);
 	}
-	
 }

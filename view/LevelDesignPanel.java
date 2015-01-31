@@ -10,6 +10,14 @@ import javax.swing.*;
 import model.*;
 import controller.*;
 
+/**
+ * 
+ * This is the component which is used by
+ * the end user to draw a single level. Its DTs 
+ * are stored in the controller.
+ * @author Roman Pusec
+ *
+ */
 public class LevelDesignPanel extends JPanel implements ActionListener, KeyListener {
 
 	private static final long serialVersionUID = 1L;
@@ -19,20 +27,27 @@ public class LevelDesignPanel extends JPanel implements ActionListener, KeyListe
 	private int multipleModeKey = KeyEvent.VK_CONTROL; 
 	private int multipleAtOnceKey = KeyEvent.VK_SHIFT;
 	private GridBagConstraints c;
-	private ProjectInfoPanel pip;
 	
-	public LevelDesignPanel(Controller contr, ProjectInfoPanel pip) 
+	/**
+	 * Sets the layout, and references the initial controller. 
+	 * @param contr The controller to reference
+	 */
+	public LevelDesignPanel(Controller contr) 
 	{
 		//sets the layout
 		setLayout(new GridBagLayout());
 		this.c = new GridBagConstraints();
 		this.controller = contr;
-		this.pip = pip;
-		checkCapslock();
 		setFocusable(true);
 		addKeyListener(this); 
 	}
 	
+	/**
+	 * Builds the panel itself based on the applied height and width. 
+	 * @param maxHeight Max height.
+	 * @param maxWidth Max width.
+	 * @param defaultAT Default AvailableTexture. 
+	 */
 	public void buildPanel(int maxHeight, int maxWidth, AvailableTexture defaultAT)
 	{
 		//sets height and width to controller
@@ -45,7 +60,7 @@ public class LevelDesignPanel extends JPanel implements ActionListener, KeyListe
 		if(controller.getDisplayTextures() != null)
 			removeAllActionListeners();
 		
-		//holds the array of displayTextures and adds it later to controller
+		//the array of displayTextures, adds it later to controller
 		ArrayList<DisplayTexture> newDisplayTextures = new ArrayList<DisplayTexture>();
 		
 		//current values
@@ -81,11 +96,14 @@ public class LevelDesignPanel extends JPanel implements ActionListener, KeyListe
 		validate();
 		repaint();
 		
-		//adds it to the controller
+		//adds the new DTs to the controller
 		controller.setDisplayTextures(newDisplayTextures);
 		controller.setDefaultAT(defaultAT);
 	}
 	
+	/**
+	 * Removes all ActionListeners from all DTs. 
+	 */
 	private void removeAllActionListeners()
 	{
 		for(DisplayTexture dt : controller.getDisplayTextures())
@@ -109,14 +127,6 @@ public class LevelDesignPanel extends JPanel implements ActionListener, KeyListe
 		
 	}
 	
-	private void checkCapslock()
-	{
-		if(Toolkit.getDefaultToolkit().getLockingKeyState(KeyEvent.VK_CAPS_LOCK))
-			pip.notifyCapslock(true);
-		else
-			pip.notifyCapslock(false);
-	}
-	
 	@Override
 	public void keyPressed(KeyEvent ke) {
 		if(ke.getKeyCode() == multipleModeKey) 
@@ -124,8 +134,6 @@ public class LevelDesignPanel extends JPanel implements ActionListener, KeyListe
 		
 		if(ke.getKeyCode() == multipleAtOnceKey) 
 			multipleAtOnceMode = true;
-		
-		checkCapslock();
 	}
 
 	@Override
@@ -149,6 +157,11 @@ public class LevelDesignPanel extends JPanel implements ActionListener, KeyListe
 	public void keyTyped(KeyEvent ke) {
 	}
 
+	/**
+	 * Removes all of the DisplayTextures and adds 
+	 * new, updates DisplayTextures to the stage. 
+	 * @param updatedStage The array of new or updated DisplayTextures. 
+	 */
 	public void updateStage(ArrayList<DisplayTexture> updatedStage) {
 		//removes all DisplayTextures
 		removeAll();

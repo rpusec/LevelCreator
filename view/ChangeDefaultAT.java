@@ -6,6 +6,12 @@ import javax.swing.*;
 import model.AvailableTexture;
 import controller.Controller;
 
+/**
+ * 
+ * Changes the key of the default AT. 
+ * @author Roman Pusec
+ *
+ */
 public class ChangeDefaultAT extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
@@ -13,6 +19,10 @@ public class ChangeDefaultAT extends JFrame implements ActionListener {
 	private JTextField jtfKey;
 	private JButton jbChange;
 	
+	/**
+	 * Assembles the GUI and references the controller.
+	 * @param contr Controller reference. 
+	 */
 	public ChangeDefaultAT(Controller contr)
 	{
 		//setting up the controller
