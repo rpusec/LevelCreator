@@ -15,6 +15,12 @@ import model.DisplayTexture;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+/**
+ * 
+ * Encodes the current project to XML. 
+ * @author Roman Pusec
+ *
+ */
 public abstract class XmlEncoder implements XmlElementConstants{
 	
 	private static DocumentBuilderFactory docFactory;
@@ -23,12 +29,24 @@ public abstract class XmlEncoder implements XmlElementConstants{
 	private static Element rootElement, availableTexturesRoot, defaultATItem, displayTexturesRoot, stageWidthElement, stageHeightElement;
 	private static Controller controller;
 	
+	/**
+	 * Saves the project as XML. 
+	 * @param selectedFile The file which we want to save the results to. 
+	 * @param contr The controller reference. 
+	 * @throws ParserConfigurationException
+	 * @throws TransformerException
+	 */
 	public static void saveXml(File selectedFile, Controller contr) throws ParserConfigurationException, TransformerException
 	{
 		docFactory = DocumentBuilderFactory.newInstance();
 		docBuilder = docFactory.newDocumentBuilder();
 		
 		controller = contr;
+		
+		/* the following methods encode the project to XML
+		each of these methods reference the controller at certain
+		points to retrieve appropriate information and create the
+		appropriate XML elements */
 		
 		createRootElements();
 		createATSection();
@@ -37,6 +55,9 @@ public abstract class XmlEncoder implements XmlElementConstants{
 		saveResult(selectedFile);
 	}
 	
+	/**
+	 * Creates all of the root elements. 
+	 */
 	private static void createRootElements()
 	{
 		//is our document
@@ -65,6 +86,9 @@ public abstract class XmlEncoder implements XmlElementConstants{
 		rootElement.appendChild(stageHeightElement);
 	}
 	
+	/**
+	 * AvailableTexture XML section. 
+	 */
 	private static void createATSection()
 	{
 		for(AvailableTexture at : controller.getAvailableTextures())
@@ -103,6 +127,9 @@ public abstract class XmlEncoder implements XmlElementConstants{
 		defaultATItem.appendChild(defaultColor);
 	}
 	
+	/**
+	 * DisplayTexture XML section. 
+	 */
 	private static void createDTSection()
 	{
 		for(DisplayTexture dt : controller.getDisplayTextures())
@@ -113,12 +140,20 @@ public abstract class XmlEncoder implements XmlElementConstants{
 		}
 	}
 	
+	/**
+	 * Stage width and height XML section. 
+	 */
 	private static void setStageWidthHeight()
 	{
 		stageWidthElement.appendChild(doc.createTextNode("" + controller.getStageWidth()));
 		stageHeightElement.appendChild(doc.createTextNode("" + controller.getStageHeight()));
 	}
 	
+	/**
+	 * Saves the final results as an actual XML file. 
+	 * @param selectedFile The file to save the results to. 
+	 * @throws TransformerException
+	 */
 	private static void saveResult(File selectedFile) throws TransformerException
 	{
 		TransformerFactory transformerFactory = TransformerFactory.newInstance();

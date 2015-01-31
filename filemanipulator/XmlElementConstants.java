@@ -1,5 +1,11 @@
 package filemanipulator;
 
+/**
+ * 
+ * Contains the constants used when assembling the XML. 
+ * @author Roman Pusec
+ *
+ */
 public interface XmlElementConstants 
 {
 	public final String LEVEL = 				"Level";

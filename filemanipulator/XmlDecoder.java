@@ -19,6 +19,14 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+/**
+ * 
+ * Reads an XML project file and assembles application 
+ * components (AvailableTextures, DisplayTextures, etc.)
+ * based on the collected information. 
+ * @author Roman Pusec
+ *
+ */
 public class XmlDecoder implements XmlElementConstants {
 	
 	private ArrayList<DisplayTexture> displayTextures = new ArrayList<DisplayTexture>();

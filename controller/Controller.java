@@ -305,7 +305,7 @@ public class Controller {
 	
 	public void saveLevelAs()
 	{
-		File updatedFile = fileManipulator.saveFileAs(null);
+		File updatedFile = fileManipulator.saveFileAs();
 		
 		if(updatedFile != null)
 		{

@@ -8,15 +8,30 @@ import javax.xml.transform.TransformerException;
 
 import controller.Controller;
 
+/**
+ * 
+ * Class which provides Save, SaveAs, 
+ * and Open capability. 
+ * @author Roman Pusec
+ *
+ */
 public class FileManipulator {
 	
 	private Controller contr;
 	
+	/**
+	 * Adds the controller reference. 
+	 * @param contr Controller reference. 
+	 */
 	public FileManipulator(Controller contr)
 	{
 		this.contr = contr;
 	}
 	
+	/**
+	 * Saves the file. 
+	 * @param fileToSelect Target file to save. 
+	 */
 	public void saveFile(File fileToSelect)
 	{
 		try {
@@ -26,7 +41,11 @@ public class FileManipulator {
 		}
 	}
 	
-	public File saveFileAs(String contentToSave)
+	/**
+	 * Saves the file as another file. 
+	 * @return Null if the saving process was dismissed, otherwise returns the selected file. 
+	 */
+	public File saveFileAs()
 	{
 		//preparing the file chooser
 		JFileChooser jFileChooser = new JFileChooser();
@@ -50,6 +69,10 @@ public class FileManipulator {
 		return null;
 	}
 	
+	/**
+	 * Opens a file. 
+	 * @return Null if the file open process was dismissed, otherwise returns the selected file. 
+	 */
 	public File openFile()
 	{
 		//preparing the file chooser

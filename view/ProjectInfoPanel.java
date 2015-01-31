@@ -51,7 +51,7 @@ public class ProjectInfoPanel extends JPanel {
 	
 	/**
 	 * Sets the path of the file. 
-	 * @param path Path of the file
+	 * @param path Path of the file. 
 	 */
 	public void setCurrentFilePath(String path)
 	{
@@ -60,7 +60,7 @@ public class ProjectInfoPanel extends JPanel {
 	
 	/**
 	 * Displays the CAPSLOCK notification. 
-	 * @param isCapslockOn Input true to notify on the application that CAPSLOCK is activated, false otherwise. 
+	 * @param isCapslockOn True to mark CAPSLOCK as activated, false otherwise. 
 	 */
 	public void notifyCapslock(boolean isCapslockOn)
 	{
