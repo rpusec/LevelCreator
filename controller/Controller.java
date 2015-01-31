@@ -7,6 +7,13 @@ import filemanipulator.*;
 import view.MainView;
 import model.*;
 
+/**
+ * 
+ * This class provides the initial 
+ * logic of the whole application. 
+ * @author Roman Pusec
+ *
+ */
 public class Controller {
 	
 	private ArrayList<DisplayTexture> displayTextures = null;
@@ -22,9 +29,13 @@ public class Controller {
 	
 	private MainView mainView;
 	
-	public Controller() 
+	/**
+	 * Creates an instance of the FileManipulator class. 
+	 */
+	public Controller(MainView mainView) 
 	{
 		fileManipulator = new FileManipulator(this);
+		this.mainView = mainView;
 	}
 	
 	public void setDisplayTextures(ArrayList<DisplayTexture> displayTextures)
@@ -47,6 +58,10 @@ public class Controller {
 		return this.availableTextures;
 	}
 	
+	/**
+	 * Sets a different default AvailableTexture. 
+	 * @param defaultAT New defaultAT. 
+	 */
 	public void setDefaultAT(AvailableTexture defaultAT)	
 	{
 		if(this.defaultAT != null)
@@ -89,18 +104,31 @@ public class Controller {
 		return this.stageHeight;			
 	}
 	
+	/**
+	 * Adds a new AvailableTexture to the application. 
+	 * @param newAvailableTexture New AvailableTexture. 
+	 */
 	public void addAvailableTexture(AvailableTexture newAvailableTexture) 
 	{
 		availableTextures.add(newAvailableTexture);
 		mainView.addAvailableTexture(newAvailableTexture);
 	}
 	
+	/**
+	 * Removes an AvailableTexture from the application. 
+	 * @param newAvailableTexture Target AvailableTexture. 
+	 */
 	public void removeAvailableTexture(AvailableTexture availableTexture)
 	{
 		availableTextures.remove(availableTexture);
 		mainView.removeAvailableTexture(availableTexture);
 	}
 	
+	/**
+	 * Marks a single DT as selected. 
+	 * @param dt Target DisplayTexture. 
+	 * @param removeIfExist Removes the DT if it already is selected. 
+	 */
 	public void addToSelected(DisplayTexture dt, boolean removeIfExist)
 	{	
 		if(!dt.isSelected())
@@ -113,12 +141,19 @@ public class Controller {
 				removeFromSelected(dt);
 	}
 	
+	/**
+	 * Removes a single DT from the selected list. 
+	 * @param dt Target DisplayTexture. 
+	 */
 	public void removeFromSelected(DisplayTexture dt)
 	{
 		selectedDisplayTextures.remove(dt);
 		dt.setSelected(false);
 	}
 	
+	/**
+	 * Removes all DTs from the selected list. 
+	 */
 	public void removeAllFromSelected()
 	{
 		for(DisplayTexture dt : selectedDisplayTextures)
@@ -127,6 +162,11 @@ public class Controller {
 		selectedDisplayTextures.clear();
 	}
 	
+	/**
+	 * Draws the textures to the stage based on the chosen character, and based
+	 * on all of the selected DTs. 
+	 * @param chosenChar The keyboard character the AT is associated with. 
+	 */
 	public void drawTextureToStage(char chosenChar)
 	{	
 		if(availableTextures != null)
@@ -146,6 +186,9 @@ public class Controller {
 		}
 	}
 	
+	/**
+	 * Removes all textures from stage. 
+	 */
 	public void removeTexturesFromStage()
 	{
 		if(defaultAT != null)
@@ -155,6 +198,13 @@ public class Controller {
 		}
 	}
 	
+	/**
+	 * Checks if the key is original, that is, if an AvailableTexture
+	 * doesn't share the same key. 
+	 * @param theKey The target key. 
+	 * @param availableTextures The array of available textures. (Sometimes it is needed to reference ATs not a part of the controller)
+	 * @return True if the key is original, false otherwise. 
+	 */
 	public static boolean isKeyOriginal(char theKey, ArrayList<AvailableTexture> availableTextures)
 	{
 		for(AvailableTexture at : availableTextures)
@@ -166,6 +216,10 @@ public class Controller {
 		return true;
 	}
 	
+	/**
+	 * Adds a row to the stage. 
+	 * @param whatPosition On what target position should the row be added. 
+	 */
 	public void addRow(int whatPosition)
 	{
 		if(displayTextures != null && defaultAT != null)
@@ -182,6 +236,10 @@ public class Controller {
 		}
 	}
 	
+	/**
+	 * Removes a row from the stage. 
+	 * @param whatPosition On what target position should the row be removed. 
+	 */
 	public void removeRow(int whatPosition)
 	{
 		if(displayTextures != null)
@@ -198,6 +256,10 @@ public class Controller {
 		}
 	}
 	
+	/**
+	 * Adds a column to the stage. 
+	 * @param whatPosition On what position should the column be added. 
+	 */
 	public void addCol(int whatPosition)
 	{
 		if(displayTextures != null)
@@ -219,6 +281,10 @@ public class Controller {
 		}
 	}
 	
+	/**
+	 * Adds a column to the stage. 
+	 * @param whatPosition On what position should the column be removed. 
+	 */
 	public void removeCol(int whatPosition)
 	{
 		if(displayTextures != null)
@@ -286,12 +352,18 @@ public class Controller {
 		}
 	}
 	
+	/**
+	 * If a new file is being used. 
+	 */
 	public void notifyNewFile()
 	{
 		selectedFile = null;
 		mainView.notifyFileUsage("", false);
 	}
 	
+	/**
+	 * Saves the level as an XML. 
+	 */
 	public void saveLevel()
 	{
 		if(selectedFile != null)
@@ -303,6 +375,9 @@ public class Controller {
 			saveLevelAs();
 	}
 	
+	/**
+	 * Saves the level as a different XML file. 
+	 */
 	public void saveLevelAs()
 	{
 		File updatedFile = fileManipulator.saveFileAs();
@@ -314,6 +389,10 @@ public class Controller {
 		}
 	}
 	
+	/**
+	 * Opens a project XML file and assembles the 
+	 * level based on the gathered information. 
+	 */
 	public void openLevel()
 	{
 		File chosenFile = fileManipulator.openFile();
@@ -330,17 +409,24 @@ public class Controller {
 		}
 	}
 	
+	/**
+	 * Returns a random color. 
+	 * @return Random color. 
+	 */
 	public static Color getRandomColor()
 	{
 		final int MAX_RANGE = 255;
 		return new Color((int)Math.floor(Math.random()*MAX_RANGE), (int)Math.floor(Math.random()*MAX_RANGE), (int)Math.floor(Math.random()*MAX_RANGE));
 	}
 	
-	public void addMainViewReference(MainView mainView)
-	{ 
-		this.mainView = mainView; 
-	}
-	
+	/**
+	 * Builds the overall stage to work on. 
+	 * @param stageHeight Height of the stage. 
+	 * @param stageWidth Width of the stage. 
+	 * @param defaultAT The default AT. 
+	 * @param availableTextures Array of AvailableTextures. 
+	 * @param displayTextures Array of DisplayTextures. 
+	 */
 	public void buildWorkingStage(int stageHeight, int stageWidth, AvailableTexture defaultAT, ArrayList<AvailableTexture> availableTextures, ArrayList<DisplayTexture> displayTextures)
 	{
 		if(mainView != null)

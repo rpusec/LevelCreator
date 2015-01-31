@@ -36,8 +36,7 @@ public class MainView extends JFrame implements ActionListener, KeyListener {
 		addKeyListener(this); 
 		setFocusable(true);
 		
-		controller = new Controller();
-		controller.addMainViewReference(this);
+		controller = new Controller(this);
 		projectInfoPanel = new ProjectInfoPanel();
 		levelDesignPanel = new LevelDesignPanel(controller);
 		availableTexturePanel = new AvailableTexturePanel(controller);

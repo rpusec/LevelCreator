@@ -10,8 +10,8 @@ import controller.Controller;
 
 /**
  * 
- * Class which provides Save, SaveAs, 
- * and Open capability. 
+ * Class which provides the Save, SaveAs, 
+ * and Open capabilities. 
  * @author Roman Pusec
  *
  */
