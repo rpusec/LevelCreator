@@ -307,8 +307,9 @@ public class Controller {
 	}
 	
 	/**
-	 * Selects multiple DTs at once. 
-	 * @param dt DT to which it should select
+	 * Selects multiple DTs at once. Selects from the 
+	 * first DT in the array of selected DTs. 
+	 * @param dt DT to which it should select. 
 	 */
 	public void selectMultipleAtOnce(DisplayTexture dt)
 	{

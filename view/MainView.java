@@ -35,6 +35,7 @@ public class MainView extends JFrame implements ActionListener, KeyListener {
 	public MainView() {
 		addKeyListener(this); 
 		setFocusable(true);
+		requestFocusInWindow();
 		
 		controller = new Controller(this);
 		projectInfoPanel = new ProjectInfoPanel();
@@ -57,6 +58,60 @@ public class MainView extends JFrame implements ActionListener, KeyListener {
 		checkCapslock();
 		
 		setDefaultWorkingStage();
+		
+		JPanel mvContent = (JPanel) getContentPane();
+		
+		//application uses key bindings to check for pressed keys
+		mvContent.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK), "saveFileMapKey");
+		mvContent.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.ALT_DOWN_MASK), "saveFileAsMapKey");
+		mvContent.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK), "openFileMapKey");
+		mvContent.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_CAPS_LOCK, 0), "onCapslock");
+		
+		mvContent.getActionMap().put("saveFileMapKey", new AbstractAction(){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controller.saveLevel();
+			}
+		});
+		
+		mvContent.getActionMap().put("saveFileAsMapKey", new AbstractAction(){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controller.saveLevelAs();
+			}
+		});
+		
+		mvContent.getActionMap().put("openFileMapKey", new AbstractAction(){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controller.openLevel();
+			}
+		});
+		
+		mvContent.getActionMap().put("onCapslock", new AbstractAction(){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				checkCapslock();
+			}
+		});
+		
+		//added to check if CAPSLOCK was activated when the frame was out of focus
+		WindowAdapter wAdapter = new WindowAdapter(){
+			public void windowGainedFocus(WindowEvent e){
+				checkCapslock();
+			}
+		};
+		
+		this.addWindowListener(wAdapter);
+		this.addWindowFocusListener(wAdapter);
 	}
 	
 	/**
@@ -284,7 +339,25 @@ public class MainView extends JFrame implements ActionListener, KeyListener {
 	}
 
 	@Override
-	public void keyPressed(KeyEvent arg0) { checkCapslock(); }
+	public void keyPressed(KeyEvent e) 
+	{
+		/*
+		checkCapslock();
+		
+		//key combination for saving the file 
+		if(e.isControlDown() && e.getKeyCode() == KeyEvent.VK_S)
+			controller.saveLevel();
+		
+		//key combination for save file as
+		if(e.isAltDown() && e.getKeyCode() == KeyEvent.VK_S)
+			controller.saveLevelAs();
+		
+		//key combination for opening the file 
+		if(e.isControlDown() && e.getKeyCode() == KeyEvent.VK_O)
+			controller.openLevel();
+			
+		*/
+	}
 
 	@Override
 	public void keyReleased(KeyEvent arg0) {}
