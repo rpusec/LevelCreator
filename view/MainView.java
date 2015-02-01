@@ -266,6 +266,7 @@ public class MainView extends JFrame implements ActionListener {
 		
 		//creating the stage based on this information
 		buildWorkingStage(defaultStageSize, defaultStageSize, basicDefaultAT, basicATs, null);
+		controller.registerToMemento();
 	}
 	
 	/**

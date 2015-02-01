@@ -371,14 +371,13 @@ public class Controller {
 	}
 	
 	/**
-	 * Creates a new state and adds 
-	 * it to memento. 
+	 * Creates a new state/memento and adds 
+	 * it to Caretaker. 
 	 */
 	public void registerToMemento()
 	{
 		originator.set(displayTextures, availableTextures, defaultAT, stageWidth, stageHeight);
 		caretaker.addMemento(originator.createMemento());
-		caretaker.setCurrMementoIndex(caretaker.getCurrMementoIndex()+1);
 	}
 	
 	/**
@@ -407,6 +406,10 @@ public class Controller {
 		}
 	}
 	
+	/**
+	 * Loads the following memento and 
+	 * restores the stage at that stage. 
+	 */
 	public void loadFollowingMemento()
 	{
 		if(caretaker.getCurrMementoIndex() != caretaker.getMementoList().size()-1)
@@ -425,6 +428,12 @@ public class Controller {
 					originator.getATs(),
 					originator.getDTs());
 		}
+	}
+	
+	public void resetMemento()
+	{
+		originator.resetAttributes();
+		caretaker.emptyMementos();
 	}
 	
 	/**
@@ -481,6 +490,7 @@ public class Controller {
 			stageHeight = xmlDecoder.getStageHeight();
 			buildWorkingStage(xmlDecoder.getStageHeight(), xmlDecoder.getStageWidth(), xmlDecoder.getDefaultAT(), xmlDecoder.getAvailableTextures(), xmlDecoder.getDisplayTextures());
 			mainView.notifyFileUsage(chosenFile.getAbsolutePath(), false);
+			registerToMemento();
 		}
 	}
 	

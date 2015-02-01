@@ -222,6 +222,10 @@ public class StartNewProject extends JFrame implements ActionListener {
 			
 			controller.notifyNewFile();
 			
+			//resets the memento list and registers the new, empty stage as the first memento
+			controller.resetMemento();
+			controller.registerToMemento();
+			
 			dispose();
 		}
 		
