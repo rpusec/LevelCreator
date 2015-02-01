@@ -388,22 +388,7 @@ public class Controller {
 	{
 		//if the previous memento exists
 		if(caretaker.getCurrMementoIndex()-1 > -1)
-		{
-			//decreasing the current index
-			caretaker.setCurrMementoIndex(caretaker.getCurrMementoIndex()-1);
-			
-			//restoring the previous memento
-			originator.restoreFromMemento(caretaker.getMemento(caretaker.getCurrMementoIndex()));
-			
-			//restores the working stage
-			mainView.buildWorkingStage(
-					originator.getStageHeight(), 
-					originator.getStageWidth(), 
-					originator.getDefaultAT(),
-					originator.getATs(),
-					originator.getDTs());
-			
-		}
+			onRestoreMomento(caretaker.getCurrMementoIndex()-1);
 	}
 	
 	/**
@@ -413,23 +398,37 @@ public class Controller {
 	public void loadFollowingMemento()
 	{
 		if(caretaker.getCurrMementoIndex() != caretaker.getMementoList().size()-1)
-		{
-			//decreasing the current index
-			caretaker.setCurrMementoIndex(caretaker.getCurrMementoIndex()+1);
-			
-			//restoring the previous memento
-			originator.restoreFromMemento(caretaker.getMemento(caretaker.getCurrMementoIndex()));
-			
-			//restores the working stage
-			mainView.buildWorkingStage(
-					originator.getStageHeight(), 
-					originator.getStageWidth(), 
-					originator.getDefaultAT(),
-					originator.getATs(),
-					originator.getDTs());
-		}
+			onRestoreMomento(caretaker.getCurrMementoIndex()+1);
 	}
 	
+	/**
+	 * Common code used for undo/redo, that is, to 
+	 * restore previous or following state/memento. 
+	 * @param mementoIndex 	Determines which memento assigned by index should be restored. </br>
+	 * 						For undo, use 'caretaker.getCurrMementoIndex()-1'. </br>
+	 * 						For redo, use 'caretaker.getCurrMementoIndex()+1'. </br>
+	 */
+	private void onRestoreMomento(int mementoIndex)
+	{
+		//decreasing the current index
+		caretaker.setCurrMementoIndex(mementoIndex);
+		
+		//restoring the previous memento
+		originator.restoreFromMemento(caretaker.getMemento(caretaker.getCurrMementoIndex()));
+		
+		//restores the working stage
+		mainView.buildWorkingStage(
+				originator.getStageHeight(), 
+				originator.getStageWidth(), 
+				originator.getDefaultAT(),
+				originator.getATs(),
+				originator.getDTs());
+	}
+	
+	/**
+	 * Resets the attributes of the originator empties 
+	 * the list of mementos in the caretaker. 
+	 */
 	public void resetMemento()
 	{
 		originator.resetAttributes();

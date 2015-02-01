@@ -110,31 +110,54 @@ public class Originator {
 		return htResult;
 	}
 	
+	/**
+	 * Returns the height of the stage. 
+	 * @return The height of the stage. 
+	 */
 	public int getStageHeight()
 	{
 		return stageHeight;
 	}
 	
+	/**
+	 * Returns the width of the stage. 
+	 * @return The width of the stage. 
+	 */
 	public int getStageWidth()
 	{
 		return stageWidth;
 	}
 	
+	/**
+	 * Returns the list of DisplayTextures.
+	 * @return List of DisplayTextures. 
+	 */
 	public ArrayList<DisplayTexture> getDTs()
 	{
 		return displayTextures;
 	}
 	
+	/**
+	 * Returns the list of AvailableTextures.
+	 * @return List of AvailableTextures. 
+	 */
 	public ArrayList<AvailableTexture> getATs()
 	{
 		return availableTextures;
 	}
 	
+	/**
+	 * Returns the defaultAT. 
+	 * @return DefaultAT. 
+	 */
 	public AvailableTexture getDefaultAT()
 	{
 		return defaultAT;
 	}
 	
+	/**
+	 * Resets the attributes. 
+	 */
 	public void resetAttributes()
 	{
 		stageWidth = 0;
