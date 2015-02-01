@@ -5,6 +5,7 @@ import java.io.File;
 import java.util.ArrayList;
 import filemanipulator.*;
 import view.MainView;
+import memento.*;
 import model.*;
 
 /**
@@ -21,13 +22,20 @@ public class Controller {
 	private ArrayList<DisplayTexture> selectedDisplayTextures = new ArrayList<DisplayTexture>();
 	private AvailableTexture defaultAT = null;
 	
+	//stage dimensions
 	private int stageWidth;
 	private int stageHeight;
 	
+	//file manipulaition
 	private File selectedFile = null;
 	private FileManipulator fileManipulator;
 	
+	//main view reference 
 	private MainView mainView;
+	
+	//memento design pattern
+	private Originator originator;
+	private Caretaker caretaker;
 	
 	/**
 	 * Creates an instance of the FileManipulator class. 
@@ -36,6 +44,8 @@ public class Controller {
 	{
 		fileManipulator = new FileManipulator(this);
 		this.mainView = mainView;
+		originator = new Originator();
+		caretaker = new Caretaker();
 	}
 	
 	public void setDisplayTextures(ArrayList<DisplayTexture> displayTextures)
@@ -171,6 +181,8 @@ public class Controller {
 	{	
 		if(availableTextures != null)
 		{
+			boolean wasStageAltered = false;
+			
 			//getting the appropriate AvailableTexture
 			for(AvailableTexture at : availableTextures)
 			{
@@ -180,9 +192,14 @@ public class Controller {
 					for(DisplayTexture dt : selectedDisplayTextures)
 						dt.setAvailableTexture(at);
 					
+					wasStageAltered = true;
 					break;
 				}
 			}
+			
+			//to avoid characters such as SHIFT, ENTER, etc. 
+			if(wasStageAltered)
+				registerToMemento();
 		}
 	}
 	
@@ -350,6 +367,63 @@ public class Controller {
 						addToSelected(displayTextures.get(i), false);
 				}
 			}
+		}
+	}
+	
+	/**
+	 * Creates a new state and adds 
+	 * it to memento. 
+	 */
+	public void registerToMemento()
+	{
+		originator.set(displayTextures, availableTextures, defaultAT, stageWidth, stageHeight);
+		caretaker.addMemento(originator.createMemento());
+		caretaker.setCurrMementoIndex(caretaker.getCurrMementoIndex()+1);
+	}
+	
+	/**
+	 * Loads the previous memento and 
+	 * restores the stage at that state. 
+	 */
+	public void loadPreviousMemento()
+	{
+		//if the previous memento exists
+		if(caretaker.getCurrMementoIndex()-1 > -1)
+		{
+			//decreasing the current index
+			caretaker.setCurrMementoIndex(caretaker.getCurrMementoIndex()-1);
+			
+			//restoring the previous memento
+			originator.restoreFromMemento(caretaker.getMemento(caretaker.getCurrMementoIndex()));
+			
+			//restores the working stage
+			mainView.buildWorkingStage(
+					originator.getStageHeight(), 
+					originator.getStageWidth(), 
+					originator.getDefaultAT(),
+					originator.getATs(),
+					originator.getDTs());
+			
+		}
+	}
+	
+	public void loadFollowingMemento()
+	{
+		if(caretaker.getCurrMementoIndex() != caretaker.getMementoList().size()-1)
+		{
+			//decreasing the current index
+			caretaker.setCurrMementoIndex(caretaker.getCurrMementoIndex()+1);
+			
+			//restoring the previous memento
+			originator.restoreFromMemento(caretaker.getMemento(caretaker.getCurrMementoIndex()));
+			
+			//restores the working stage
+			mainView.buildWorkingStage(
+					originator.getStageHeight(), 
+					originator.getStageWidth(), 
+					originator.getDefaultAT(),
+					originator.getATs(),
+					originator.getDTs());
 		}
 	}
 	

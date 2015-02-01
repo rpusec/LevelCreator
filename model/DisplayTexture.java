@@ -73,5 +73,13 @@ public class DisplayTexture extends JButton {
 	{
 		return atInUse.getKey();
 	}
-
+	
+	/**
+	 * Returns the AT in use. 
+	 * @return AvailableTexture. 
+	 */
+	public AvailableTexture getAT()
+	{
+		return atInUse;
+	}
 }

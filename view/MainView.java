@@ -17,11 +17,15 @@ import controller.*;
  * @author Roman Pusec
  *
  */
-public class MainView extends JFrame implements ActionListener, KeyListener {
+public class MainView extends JFrame implements ActionListener {
 	
 	private static final long serialVersionUID = 1L;
 	private JMenu jmFile, jmOptions, jmHelp;
-	private JMenuItem jmiNew, jmiSave, jmiSaveAs, jmiOpen, jmiAddRow, jmiRemoveRow, jmiAddCol, jmiRemoveCol, jmiAddAT, jmiRemoveAT, jmiChangeDefaultAT, jmiPrintLevel, jmiAbout;
+	private JMenuItem 	jmiNew, jmiSave, jmiSaveAs, jmiOpen, 
+						jmiAddRow, jmiRemoveRow, jmiAddCol, 
+						jmiRemoveCol, jmiAddAT, jmiRemoveAT, 
+						jmiChangeDefaultAT, jmiPrintLevel, 
+						jmiAbout, jmiUndo, jmiRedo;
 	private LevelDesignPanel levelDesignPanel;
 	private AvailableTexturePanel availableTexturePanel;
 	private ProjectInfoPanel projectInfoPanel;
@@ -33,7 +37,6 @@ public class MainView extends JFrame implements ActionListener, KeyListener {
 	 * controller. 
 	 */
 	public MainView() {
-		addKeyListener(this); 
 		setFocusable(true);
 		requestFocusInWindow();
 		
@@ -192,6 +195,8 @@ public class MainView extends JFrame implements ActionListener, KeyListener {
 		jmiChangeDefaultAT = new JMenuItem("Change Default AT");
 		jmiPrintLevel = new JMenuItem("Print Level");
 		jmiAbout = new JMenuItem("About");
+		jmiUndo = new JMenuItem("Undo");
+		jmiRedo = new JMenuItem("Redo");
 		
 		//adding menu items to menus
 		jmFile.add(jmiNew);
@@ -200,6 +205,9 @@ public class MainView extends JFrame implements ActionListener, KeyListener {
 		jmFile.add(jmiSaveAs);
 		jmFile.add(new JSeparator());
 		jmFile.add(jmiOpen);
+		jmOptions.add(jmiUndo);
+		jmOptions.add(jmiRedo);
+		jmOptions.add(new JSeparator());
 		jmOptions.add(jmiAddRow);
 		jmOptions.add(jmiRemoveRow);
 		jmOptions.add(new JSeparator());
@@ -236,6 +244,8 @@ public class MainView extends JFrame implements ActionListener, KeyListener {
 		jmiChangeDefaultAT.addActionListener(this);
 		jmiPrintLevel.addActionListener(this);
 		jmiAbout.addActionListener(this);
+		jmiUndo.addActionListener(this);
+		jmiRedo.addActionListener(this);
 	}
 	
 	/**
@@ -279,7 +289,7 @@ public class MainView extends JFrame implements ActionListener, KeyListener {
 		}
 		
 		//builds the available textures
-		availableTexturePanel.buildPanel(availableTextures); 
+		availableTexturePanel.buildPanel(availableTextures);
 	}
 	
 	@Override
@@ -336,33 +346,13 @@ public class MainView extends JFrame implements ActionListener, KeyListener {
 		{
 			JOptionPane.showMessageDialog(null, "Level Creator\nBy Roman Pusec, 2014", "About", JOptionPane.INFORMATION_MESSAGE);
 		}
-	}
-
-	@Override
-	public void keyPressed(KeyEvent e) 
-	{
-		/*
-		checkCapslock();
-		
-		//key combination for saving the file 
-		if(e.isControlDown() && e.getKeyCode() == KeyEvent.VK_S)
-			controller.saveLevel();
-		
-		//key combination for save file as
-		if(e.isAltDown() && e.getKeyCode() == KeyEvent.VK_S)
-			controller.saveLevelAs();
-		
-		//key combination for opening the file 
-		if(e.isControlDown() && e.getKeyCode() == KeyEvent.VK_O)
-			controller.openLevel();
-			
-		*/
-	}
-
-	@Override
-	public void keyReleased(KeyEvent arg0) {}
-
-	@Override
-	public void keyTyped(KeyEvent arg0) {
+		else if(e.getSource() == jmiUndo)
+		{
+			controller.loadPreviousMemento();
+		}
+		else if(e.getSource() == jmiRedo)
+		{
+			controller.loadFollowingMemento();
+		}
 	}
 }
