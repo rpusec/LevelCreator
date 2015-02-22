@@ -37,6 +37,14 @@ public class MainView extends JFrame implements ActionListener {
 	 * controller. 
 	 */
 	public MainView() {
+		
+		//makes it possible for the setBackground and similar methods to work under mac
+		try {
+			UIManager.setLookAndFeel( UIManager.getCrossPlatformLookAndFeelClassName() );
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		setFocusable(true);
 		requestFocusInWindow();
 		
