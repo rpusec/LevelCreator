@@ -32,3 +32,12 @@ Saving and Opening Levels
 It is possible to save your levels for later usage. The levels are saved as an <b>XML file</b>. That XML file contains all of the information about the level, such as stage height and width, AvailableTextures, and DisplayTextures. 
 
 When the XML files are opened from the application, the application reads the XML file and assembles the canvas and the components appropriately. 
+
+Using levels
+----------
+
+To actually use your level in your application, go to `Options -> Print Level`. This will pop-up another JFrame window which displays the level as text. 
+
+![](https://raw.githubusercontent.com/rpusec/LevelCreator/master/github_imgs/printed_lvl.png)
+
+The application printed out the level exactly how the level was built. Afterwards you can use that 2D array in your games in whichever way you find satisfactory. 
