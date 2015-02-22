@@ -250,6 +250,8 @@ public class Controller {
 			stageHeight++; //updates stage height due to new row
 			
 			mainView.updateStage(displayTextures);
+			
+			registerToMemento();
 		}
 	}
 	
@@ -270,6 +272,8 @@ public class Controller {
 			stageHeight--; //updates stage height due to removed row
 			
 			mainView.updateStage(displayTextures);
+			
+			registerToMemento();
 		}
 	}
 	
@@ -295,6 +299,8 @@ public class Controller {
 			}
 			
 			mainView.updateStage(displayTextures);
+			
+			registerToMemento();
 		}
 	}
 	
@@ -320,6 +326,8 @@ public class Controller {
 			}
 			
 			mainView.updateStage(displayTextures);
+			
+			registerToMemento();
 		}
 	}
 	

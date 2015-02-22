@@ -289,6 +289,10 @@ public class MainView extends JFrame implements ActionListener {
 			levelDesignPanel.updateStage(displayTextures); 
 		}
 		
+		//setting the dimensions
+		controller.setStageHeight(stageHeight);
+		controller.setStageWidth(stageWidth);
+		
 		//builds the available textures
 		availableTexturePanel.buildPanel(availableTextures);
 	}
