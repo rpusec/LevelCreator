@@ -38,13 +38,7 @@ public class MainView extends JFrame implements ActionListener {
 	 */
 	public MainView() {
 		
-		//makes it possible for the setBackground and similar methods to work under mac
-		try {
-			UIManager.setLookAndFeel( UIManager.getCrossPlatformLookAndFeelClassName() );
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
+		setLookAndFeel();
 		setFocusable(true);
 		requestFocusInWindow();
 		
@@ -123,6 +117,15 @@ public class MainView extends JFrame implements ActionListener {
 		
 		this.addWindowListener(wAdapter);
 		this.addWindowFocusListener(wAdapter);
+	}
+	
+	private void setLookAndFeel()
+	{
+		try {
+			UIManager.setLookAndFeel( UIManager.getCrossPlatformLookAndFeelClassName() );
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -273,7 +276,7 @@ public class MainView extends JFrame implements ActionListener {
 		basicATs.add(new AvailableTexture("cloud", 'c', Color.BLUE)); 
 		
 		//creating the stage based on this information
-		buildWorkingStage(defaultStageSize, defaultStageSize, basicDefaultAT, basicATs, null);
+		buildWorkingStage(defaultStageSize, defaultStageSize, basicDefaultAT, basicATs, null, false);
 		controller.registerToMemento();
 	}
 	
@@ -285,24 +288,29 @@ public class MainView extends JFrame implements ActionListener {
 	 * @param availableTextures Array of ATs.
 	 * @param displayTextures Array of DTs. 
 	 */
-	public void buildWorkingStage(int stageHeight, int stageWidth, AvailableTexture defaultAT, ArrayList<AvailableTexture> availableTextures, ArrayList<DisplayTexture> displayTextures)
+	public void buildWorkingStage(int stageHeight, int stageWidth, AvailableTexture defaultAT, ArrayList<AvailableTexture> availableTextures, ArrayList<DisplayTexture> displayTextures, boolean displayPB)
 	{
+		//setting the dimensions
+		controller.setStageHeight(stageHeight);
+		controller.setStageWidth(stageWidth);
+		
 		//if the display textures are null, the application should
 		//draw new, empty display textures based on the applied height/width
 		if(displayTextures == null)
-			levelDesignPanel.buildPanel(stageHeight, stageWidth, defaultAT); 
+			levelDesignPanel.buildPanel(stageHeight, stageWidth, defaultAT, displayPB); 
 		else
 		{
 			controller.setDisplayTextures(displayTextures); 
 			levelDesignPanel.updateStage(displayTextures); 
 		}
 		
-		//setting the dimensions
-		controller.setStageHeight(stageHeight);
-		controller.setStageWidth(stageWidth);
-		
 		//builds the available textures
 		availableTexturePanel.buildPanel(availableTextures);
+	}
+	
+	public void buildWorkingStage(int stageHeight, int stageWidth, AvailableTexture defaultAT, ArrayList<AvailableTexture> availableTextures, ArrayList<DisplayTexture> displayTextures)
+	{
+		buildWorkingStage(stageHeight, stageWidth, defaultAT, availableTextures, displayTextures, true);
 	}
 	
 	@Override

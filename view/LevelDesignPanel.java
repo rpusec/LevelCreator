@@ -6,7 +6,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+
 import javax.swing.*;
+
+import lcprogressbars.LDPProgressBar;
 import model.*;
 import controller.*;
 
@@ -42,17 +45,23 @@ public class LevelDesignPanel extends JPanel implements ActionListener, KeyListe
 		addKeyListener(this); 
 	}
 	
+	public void buildPanel(int maxHeight, int maxWidth, AvailableTexture defaultAT)
+	{
+		buildPanel(maxHeight, maxWidth, defaultAT, true);
+	}
+	
 	/**
 	 * Builds the panel itself based on the applied height and width. 
 	 * @param maxHeight Max height.
 	 * @param maxWidth Max width.
 	 * @param defaultAT Default AvailableTexture. 
 	 */
-	public void buildPanel(int maxHeight, int maxWidth, AvailableTexture defaultAT)
+	public void buildPanel(int maxHeight, int maxWidth, AvailableTexture defaultAT, boolean displayPB)
 	{
 		//sets height and width to controller
 		controller.setStageHeight(maxHeight);
 		controller.setStageWidth(maxWidth);
+		controller.setDefaultAT(defaultAT);
 		
 		//removes all DisplayTextures
 		removeAll();
@@ -62,43 +71,15 @@ public class LevelDesignPanel extends JPanel implements ActionListener, KeyListe
 		
 		//the array of displayTextures, adds it later to controller
 		ArrayList<DisplayTexture> newDisplayTextures = new ArrayList<DisplayTexture>();
+		controller.setDisplayTextures(newDisplayTextures);
 		
-		//current values
-		int currColumn = 0;
-		int currRow = 0;
-		
-		//adds the DisplayTextures to the list
-		for(int i = 0; i < maxHeight * maxWidth; i++)
+		if(displayPB)
 		{
-			if(currColumn != maxWidth)
-			{
-				DisplayTexture newDT = new DisplayTexture(defaultAT);
-				newDT.addActionListener(this);
-				newDT.addKeyListener(this);
-				
-				c.fill = GridBagConstraints.HORIZONTAL;
-				c.gridx = currColumn;
-				c.gridy = currRow;
-				
-				add(newDT, c);
-				newDisplayTextures.add(newDT);
-				
-				currColumn++;
-			}
-			else
-			{
-				currColumn = 0;
-				currRow++;
-				i--;
-			}
+			Thread tLoadingProgress = new Thread(new LDPProgressBar(newDisplayTextures, controller.getStageHeight() * controller.getStageWidth()));
+			tLoadingProgress.start();
 		}
 		
-		validate();
-		repaint();
-		
-		//adds the new DTs to the controller
-		controller.setDisplayTextures(newDisplayTextures);
-		controller.setDefaultAT(defaultAT);
+		drawDTs(newDisplayTextures, true, displayPB);
 	}
 	
 	/**
@@ -162,43 +143,91 @@ public class LevelDesignPanel extends JPanel implements ActionListener, KeyListe
 	 * new, updates DisplayTextures to the stage. 
 	 * @param updatedStage The array of new or updated DisplayTextures. 
 	 */
-	public void updateStage(ArrayList<DisplayTexture> updatedStage) {
+	public void updateStage(ArrayList<DisplayTexture> updatedDTs) {
 		//removes all DisplayTextures
 		removeAll();
 		
 		if(controller.getDisplayTextures() != null)
 			removeAllActionListeners();
 		
-		//current values
-		int currColumn = 0;
-		int currRow = 0;
-		
-		//adds the DisplayTextures to the list
-		for(int i = 0; i < updatedStage.size(); i++)
-		{
-			if(currColumn != controller.getStageWidth())
-			{
-				updatedStage.get(i).addActionListener(this);
-				updatedStage.get(i).addKeyListener(this);
-				
-				c.fill = GridBagConstraints.HORIZONTAL;
-				c.gridx = currColumn;
-				c.gridy = currRow;
-				
-				add(updatedStage.get(i), c);
-				
-				currColumn++;
-			}
-			else
-			{
-				currColumn = 0;
-				currRow++;
-				i--;
-			}
-		}
-		
-		validate();
-		repaint();
+		drawDTs(updatedDTs, false, true);
 	}
 	
+	private void drawDTs(ArrayList<DisplayTexture> updatedDTs, boolean areDTsNew, boolean displayPB)
+	{
+		Thread tDDT = new Thread(new DrawDisplayTextures(updatedDTs, areDTsNew, this, this));
+		tDDT.start();
+	}
+	
+	class DrawDisplayTextures implements Runnable{
+		
+		private ArrayList<DisplayTexture> targetDTs;
+		private boolean areDTsNew;
+		private ActionListener dtActionListener;
+		private KeyListener dtKeyListener;
+		
+		public DrawDisplayTextures(
+				ArrayList<DisplayTexture> targetDTs, 
+				boolean areDTsNew,
+				ActionListener dtActionListener,
+				KeyListener dtKeyListener){
+			this.targetDTs = targetDTs;
+			this.areDTsNew = areDTsNew;
+			this.dtActionListener = dtActionListener;
+			this.dtKeyListener = dtKeyListener;
+		}
+		
+		@Override
+		public void run() {
+			int currColumn = 0;
+			int currRow = 0;
+			
+			int size = targetDTs.size();
+			
+			if(areDTsNew)
+			{
+				size = controller.getStageHeight() * controller.getStageWidth();
+			}
+			
+			//adds the DisplayTextures to the list
+			for(int i = 0; i < size; i++)
+			{
+				if(currColumn != controller.getStageWidth())
+				{
+					if(!areDTsNew)
+					{
+						targetDTs.get(i).addActionListener(dtActionListener);
+						targetDTs.get(i).addKeyListener(dtKeyListener);
+					}
+					else
+					{
+						DisplayTexture newDisplayTexture = new DisplayTexture(controller.getDefaultAT());
+						newDisplayTexture.addActionListener(dtActionListener);
+						newDisplayTexture.addKeyListener(dtKeyListener);
+						targetDTs.add(newDisplayTexture);
+					}
+					
+					c.fill = GridBagConstraints.HORIZONTAL;
+					c.gridx = currColumn;
+					c.gridy = currRow;
+					
+					if(!areDTsNew)
+						add(targetDTs.get(i), c);
+					else
+						add(targetDTs.get(targetDTs.size()-1), c);
+					
+					currColumn++;
+				}
+				else
+				{
+					currColumn = 0;
+					currRow++;
+					i--;
+				}
+			}
+			
+			validate();
+			repaint();
+		}
+	}
 }
