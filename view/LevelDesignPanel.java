@@ -97,7 +97,7 @@ public class LevelDesignPanel extends JPanel implements ActionListener, KeyListe
 		
 		if(e.getSource() instanceof DisplayTexture)
 		{
-			if(!multipleMode && !multipleAtOnceMode)
+			if(!isMultipleMode() && !multipleAtOnceMode)
 				controller.removeAllFromSelected();
 			
 			if(!multipleAtOnceMode)
@@ -111,7 +111,7 @@ public class LevelDesignPanel extends JPanel implements ActionListener, KeyListe
 	@Override
 	public void keyPressed(KeyEvent ke) {
 		if(ke.getKeyCode() == multipleModeKey) 
-			multipleMode = true;
+			setMultipleMode(true);
 		
 		if(ke.getKeyCode() == multipleAtOnceKey) 
 			multipleAtOnceMode = true;
@@ -121,7 +121,7 @@ public class LevelDesignPanel extends JPanel implements ActionListener, KeyListe
 	public void keyReleased(KeyEvent ke) {
 		
 		if(ke.getKeyCode() == multipleModeKey) 
-			multipleMode = false;
+			setMultipleMode(false);
 		
 		if(ke.getKeyCode() == multipleAtOnceKey) 
 			multipleAtOnceMode = false;
@@ -159,6 +159,14 @@ public class LevelDesignPanel extends JPanel implements ActionListener, KeyListe
 		tDDT.start();
 	}
 	
+	public boolean isMultipleMode() {
+		return multipleMode;
+	}
+
+	public void setMultipleMode(boolean multipleMode) {
+		this.multipleMode = multipleMode;
+	}
+
 	class DrawDisplayTextures implements Runnable{
 		
 		private ArrayList<DisplayTexture> targetDTs;

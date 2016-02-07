@@ -78,6 +78,7 @@ public class MainView extends JFrame implements ActionListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				controller.saveLevel();
+				levelDesignPanel.setMultipleMode(false);
 			}
 		});
 		
@@ -87,6 +88,7 @@ public class MainView extends JFrame implements ActionListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				controller.saveLevelAs();
+				levelDesignPanel.setMultipleMode(false);
 			}
 		});
 		
